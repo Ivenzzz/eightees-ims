@@ -64,12 +64,17 @@ $account_info = getAccountInfo($conn);
                                                 <td><?= htmlspecialchars($category['category_id']) ?></td>
                                                 <td><?= htmlspecialchars($category['category_name']) ?></td>
                                                 <td>
-                                                    <a href="edit_category.php?id=<?= $category['category_id'] ?>" class="btn btn-warning btn-sm">
+                                                    <button class="btn btn-warning btn-sm">
                                                         <i class="fa-solid fa-pen-to-square"></i>
-                                                    </a>
-                                                    <a href="delete_category.php?id=<?= $category['category_id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this category?');">
-                                                        <i class="fa-solid fa-trash"></i>
-                                                    </a>
+                                                    </button>
+
+                                                    <!-- Delete Form -->
+                                                    <form action="../controllers/admin_delete_material_category.php" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this category? Deleting a category will also delete the materials under it.');">
+                                                        <input type="hidden" name="category_id" value="<?= $category['category_id'] ?>">
+                                                        <button type="submit" class="btn btn-danger btn-sm">
+                                                            <i class="fa-solid fa-trash"></i>
+                                                        </button>
+                                                    </form>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
@@ -88,29 +93,8 @@ $account_info = getAccountInfo($conn);
         </div>
     </div>
 
-    <!-- Bootstrap Modal for Adding a Category -->
-    <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addCategoryModalLabel">Add Category</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form action="add_category.php" method="POST">
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="categoryName" class="form-label">Category Name</label>
-                            <input type="text" class="form-control" id="categoryName" name="category_name" required>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Save Category</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    <?php require 'partials/modal_add_material_category.php';  ?>
+
     <?php require '../inc/javascripts.php'; ?>
     <script src="../public/js/index_logout.js"></script>
 </body>

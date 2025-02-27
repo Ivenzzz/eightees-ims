@@ -6,7 +6,7 @@ require '../models/admin_account.php';
 
 $title = 'Materials';
 $materials = getMaterialsWithCategory($conn);
-$categories = getMaterialCategories($conn); // Fetch all categories
+$categories = getMaterialCategories($conn);
 $account_info = getAccountInfo($conn);
 
 
@@ -49,16 +49,16 @@ $account_info = getAccountInfo($conn);
                             </button>
                         </div>
                         <div class="card-body">
-                            <table class="table table-bordered table-striped text-xs">
+                            <table id="materialsDataTable" class="table table-bordered table-hover text-xs">
                                 <thead class="table-dark">
                                     <tr>
                                         <th>ID</th>
                                         <th>Material Name</th>
-                                        <th>Category</th>
+                                        <th>Description</th>
                                         <th>Amount</th>
                                         <th>Quantity</th>
                                         <th>Total Price</th>
-                                        <th>Supplier</th>
+                                        <th>Created At</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -68,21 +68,28 @@ $account_info = getAccountInfo($conn);
                                             <tr data-category="<?= htmlspecialchars($material['category_name']) ?>">
                                                 <td><?= htmlspecialchars($material['material_id']) ?></td>
                                                 <td><?= htmlspecialchars($material['name']) ?></td>
-                                                <td><?= htmlspecialchars($material['category_name']) ?></td>
+                                                <td><?= htmlspecialchars($material['description']) ?></td>
                                                 <td>₱<?= number_format($material['amount'], 2) ?></td>
                                                 <td><?= htmlspecialchars($material['quantity']) ?></td>
                                                 <td>₱<?= number_format($material['total_price'], 2) ?></td>
-                                                <td><?= htmlspecialchars($material['supplier']) ?></td>
+                                                <td><?= date('F j, Y', strtotime($material['created_at'])) ?></td>
                                                 <td>
-                                                    <a href="edit_material.php?id=<?= $material['material_id'] ?>" class="btn btn-warning btn-sm">
+                                                    <!-- Edit Button (Triggers Modal) -->
+                                                    <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal<?= $material['material_id'] ?>">
                                                         <i class="fa-solid fa-pen-to-square"></i>
-                                                    </a>
-                                                    <a href="delete_material.php?id=<?= $material['material_id'] ?>" class="btn btn-danger btn-sm"
-                                                        onclick="return confirm('Are you sure you want to delete this material?');">
-                                                        <i class="fa-solid fa-trash"></i>
-                                                    </a>
+                                                    </button>
+
+                                                    <!-- Delete Form -->
+                                                    <form action="../controllers/admin_delete_material.php" method="POST" class="d-inline">
+                                                        <input type="hidden" name="material_id" value="<?= $material['material_id'] ?>">
+                                                        <button type="submit" class="btn btn-danger btn-sm">
+                                                            <i class="fa-solid fa-trash"></i>
+                                                        </button>
+                                                    </form>
                                                 </td>
                                             </tr>
+
+                                            <?php require 'partials/modal_update_material.php'; ?>
                                         <?php endforeach; ?>
                                     <?php else: ?>
                                         <tr>
@@ -98,80 +105,11 @@ $account_info = getAccountInfo($conn);
         </div>
     </div>
 
-    <!-- Add Material Modal -->
-    <div class="modal fade" id="addMaterialModal" tabindex="-1" aria-labelledby="addMaterialModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content text-sm">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="addMaterialModalLabel">
-                        <i class="bi bi-plus-circle"></i> Add New Material
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="addMaterialForm" action="add_material.php" method="POST">
-                        <div class="mb-4">
-                            <label for="materialName" class="form-label">
-                                <i class="bi bi-tag"></i> Material Name
-                            </label>
-                            <input type="text" class="form-control" id="materialName" name="name" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="category" class="form-label">
-                                <i class="bi bi-list-ul"></i> Category
-                            </label>
-                            <select class="form-select" id="category" name="category_id" required>
-                                <option value="" selected disabled>Select Category</option>
-                                <?php foreach ($categories as $category): ?>
-                                    <option value="<?= htmlspecialchars($category['category_id']) ?>">
-                                        <?= htmlspecialchars($category['category_name']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div class="mb-4">
-                            <label for="description" class="form-label">
-                                <i class="bi bi-file-text"></i> Description
-                            </label>
-                            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
-                        </div>
-                        <div class="mb-4">
-                            <label for="amount" class="form-label">
-                                <i class="bi bi-currency-dollar"></i> Amount (₱)
-                            </label>
-                            <input type="number" class="form-control" id="amount" name="amount" step="0.01" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="quantity" class="form-label">
-                                <i class="bi bi-box"></i> Quantity
-                            </label>
-                            <input type="number" class="form-control" id="quantity" name="quantity" step="0.01" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="supplier" class="form-label">
-                                <i class="bi bi-truck"></i> Supplier
-                            </label>
-                            <input type="text" class="form-control" id="supplier" name="supplier" required>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                <i class="bi bi-x-circle"></i> Close
-                            </button>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="bi bi-check-circle"></i> Add Material
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
+    <?php require 'partials/modal_add_material.php'; ?>
 
     <?php require '../inc/javascripts.php'; ?>
     <script src="../public/js/index_logout.js"></script>
+    <script src="../public/js/admin_materials.js"></script>
 </body>
 
 </html>
