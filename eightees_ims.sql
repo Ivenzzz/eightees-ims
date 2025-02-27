@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 26, 2025 at 06:47 AM
+-- Generation Time: Feb 27, 2025 at 03:40 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -41,7 +41,7 @@ CREATE TABLE `accounts` (
 --
 
 INSERT INTO `accounts` (`account_id`, `username`, `password`, `role`, `profile_pic`, `created_at`) VALUES
-(1, 'admin', '$2y$10$kCv982BLq1TV.92yV.oL2ON8e4HExnuATk5yjwcpkjdaFKGokq9iS', 'admin', NULL, '2025-02-24 06:58:42');
+(1, 'admin', '$2y$10$kCv982BLq1TV.92yV.oL2ON8e4HExnuATk5yjwcpkjdaFKGokq9iS', 'admin', '/eightees_ims/storage/uploads/182ce976-c8f4-4e81-9b1b-568589019b44.jpg', '2025-02-24 06:58:42');
 
 -- --------------------------------------------------------
 
@@ -56,6 +56,22 @@ CREATE TABLE `customers` (
   `address` text DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `customers`
+--
+
+INSERT INTO `customers` (`customer_id`, `name`, `phone`, `address`, `created_at`) VALUES
+(1, 'John Doe', '09123456789', '123 Rizal Street, Barangay 6, Victorias City', '2025-02-27 01:52:56'),
+(2, 'Jane Smith', '09234567890', '456 Burgos Avenue, Barangay 19-A, Victorias City', '2025-02-27 01:52:56'),
+(3, 'Alice Johnson', '09345678901', '789 Osmeña Street, Barangay 7, Victorias City', '2025-02-27 01:52:56'),
+(4, 'Bob Brown', '09456789012', '159 Mabini Street, Barangay 1 Poblacion, E.B. Magalona', '2025-02-27 01:52:56'),
+(5, 'Charlie White', '09567890123', '753 Lopez Jaena Street, Barangay Alicante, E.B. Magalona', '2025-02-27 01:52:56'),
+(6, 'David Black', '09678901234', '852 Bonifacio Street, Barangay Consing, E.B. Magalona', '2025-02-27 01:52:56'),
+(7, 'Emma Green', '09789012345', '369 Rizal Street, Barangay Mambulac, Silay City', '2025-02-27 01:52:56'),
+(8, 'Frank Adams', '09890123456', '951 Lacson Street, Barangay Guinhalaran, Silay City', '2025-02-27 01:52:56'),
+(9, 'Grace Lee', '09901234567', '753 Zamora Street, Barangay 2, Silay City', '2025-02-27 01:52:56'),
+(10, 'Henry Clark', '09012345678', '852 Araneta Street, Barangay Hawaiian, Silay City', '2025-02-27 01:52:56');
 
 -- --------------------------------------------------------
 
@@ -107,8 +123,8 @@ CREATE TABLE `materials` (
   `material_id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `unit` varchar(50) NOT NULL,
-  `price_per_unit` decimal(10,2) NOT NULL,
+  `description` text NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
   `quantity` decimal(10,2) NOT NULL,
   `total_price` decimal(10,2) NOT NULL,
   `purchase_date` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -120,17 +136,17 @@ CREATE TABLE `materials` (
 -- Dumping data for table `materials`
 --
 
-INSERT INTO `materials` (`material_id`, `category_id`, `name`, `unit`, `price_per_unit`, `quantity`, `total_price`, `purchase_date`, `supplier`, `last_updated`) VALUES
-(1, 1, 'Cotton Fabric', 'roll', 150.00, 50.00, 7500.00, '2025-02-26 05:27:22', 'ABC Fabrics', '2025-02-26 05:42:02'),
-(2, 1, 'Polyester Fabric', 'roll', 200.00, 40.00, 8000.00, '2025-02-26 05:27:22', 'XYZ Textiles', '2025-02-26 05:44:59'),
-(3, 2, 'Printing Ink (Black)', 'bottle', 500.00, 10.00, 5000.00, '2025-02-26 05:27:22', 'Print Supplies Co.', '2025-02-26 05:27:22'),
-(4, 2, 'Printing Ink (Cyan)', 'bottle', 500.00, 8.00, 4000.00, '2025-02-26 05:27:22', 'Print Supplies Co.', '2025-02-26 05:27:22'),
-(5, 3, 'Vinyl Transfer Paper', 'pack', 300.00, 15.00, 4500.00, '2025-02-26 05:27:22', 'TransferWorks Ltd.', '2025-02-26 05:27:22'),
-(6, 3, 'Heat Press Machine', 'unit', 15000.00, 1.00, 15000.00, '2025-02-26 05:27:22', 'PressTech Inc.', '2025-02-26 05:27:22'),
-(7, 4, 'Adhesive Spray', 'can', 250.00, 20.00, 5000.00, '2025-02-26 05:27:22', 'GraphicsMart', '2025-02-26 05:27:22'),
-(8, 4, 'Fabric Cutter', 'unit', 1200.00, 2.00, 2400.00, '2025-02-26 05:27:22', 'CutPro Tools', '2025-02-26 05:27:22'),
-(9, 5, 'Tarpaulin Roll (10m)', 'roll', 3500.00, 3.00, 10500.00, '2025-02-26 05:27:22', 'WidePrint Supplies', '2025-02-26 05:27:22'),
-(10, 5, 'Banner Stand', 'pcs', 1800.00, 5.00, 9000.00, '2025-02-26 05:27:22', 'Display Essentials', '2025-02-26 05:27:22');
+INSERT INTO `materials` (`material_id`, `category_id`, `name`, `description`, `amount`, `quantity`, `total_price`, `purchase_date`, `supplier`, `last_updated`) VALUES
+(11, 1, 'Polydex', '180GSM', 3000.00, 3.00, 9000.00, '2024-02-20 02:30:00', 'ABC Textiles', '2025-02-27 02:36:01'),
+(12, 1, 'Polydex', '140GSM', 4500.00, 5.00, 22500.00, '2024-02-18 06:45:00', 'XYZ Clothing', '2025-02-27 02:35:48'),
+(13, 2, 'Vinyl Heat Transfer', 'High-quality vinyl for heat transfer', 200.00, 20.00, 4000.00, '2024-02-15 01:20:00', 'PrintTech Supplies', '2025-02-27 02:32:14'),
+(14, 2, 'Screen Printing Ink', '500ML', 500.00, 10.00, 5000.00, '2024-02-12 04:00:00', 'InkWorld Ltd.', '2025-02-27 02:32:14'),
+(15, 3, 'Heat Press Machine', 'Digital heat press machine for t-shirts', 15000.00, 2.00, 30000.00, '2024-02-10 00:15:00', 'Machinery Hub', '2025-02-27 02:32:14'),
+(16, 3, 'Sublimation Paper', 'High-quality sublimation transfer paper', 250.00, 15.00, 3750.00, '2024-02-08 08:30:00', 'PrintSupply Co.', '2025-02-27 02:32:14'),
+(17, 4, 'Tarpaulin Roll', 'Large-format tarpaulin for printing', 5000.00, 5.00, 25000.00, '2024-02-05 02:00:00', 'BigPrint Materials', '2025-02-27 02:32:14'),
+(18, 4, 'Banner Stands', 'Adjustable stands for banners', 1200.00, 4.00, 4800.00, '2024-02-02 03:50:00', 'Display Solutions', '2025-02-27 02:32:14'),
+(19, 5, 'Fabric Ink', 'Premium ink for fabric printing', 750.00, 6.00, 4500.00, '2024-01-30 06:10:00', 'ColorTech Inc.', '2025-02-27 02:32:14'),
+(20, 5, 'Embroidery Thread', 'Assorted colors of embroidery threads', 100.00, 100.00, 10000.00, '2024-01-28 01:00:00', 'ThreadMaster', '2025-02-27 02:32:14');
 
 -- --------------------------------------------------------
 
@@ -284,7 +300,7 @@ ALTER TABLE `accounts`
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `expenses`
@@ -308,7 +324,7 @@ ALTER TABLE `gains_losses`
 -- AUTO_INCREMENT for table `materials`
 --
 ALTER TABLE `materials`
-  MODIFY `material_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `material_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `material_categories`

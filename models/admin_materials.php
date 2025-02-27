@@ -17,12 +17,11 @@ function getMaterialCategories($conn) {
 }
 
 function getMaterialsWithCategory($conn) {
-    $sql = "SELECT m.material_id, m.name, m.unit, m.price_per_unit, m.quantity, m.total_price, 
-                   m.purchase_date, m.supplier, m.last_updated, 
+    $sql = "SELECT m.*, 
                    c.category_name 
             FROM materials m
             JOIN material_categories c ON m.category_id = c.category_id
-            ORDER BY m.material_id ASC";
+            ORDER BY m.material_id DESC";
 
     $result = $conn->query($sql);
 

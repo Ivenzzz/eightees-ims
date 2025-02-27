@@ -1,10 +1,15 @@
 <?php
 session_start();
+
 require '../inc/database.php';
 require '../models/admin_materials.php';
+require '../models/admin_account.php';
 
 $title = 'Materials Categories';
+
 $categories = getMaterialCategories($conn);
+$account_info = getAccountInfo($conn);
+
 ?>
 
 <!DOCTYPE html>
@@ -107,6 +112,7 @@ $categories = getMaterialCategories($conn);
         </div>
     </div>
     <?php require '../inc/javascripts.php'; ?>
+    <script src="../public/js/index_logout.js"></script>
 </body>
 
 </html>

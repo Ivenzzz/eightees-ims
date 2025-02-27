@@ -24,14 +24,24 @@
         <i class="fas fa-chevron-down ms-auto"></i>
     </a>
     <div class="collapse ps-4 mt-1 <?= in_array(basename($_SERVER['PHP_SELF']), ['materials.php', 'add_material.php', 'material_categories.php']) ? 'show' : '' ?>" id="materialsSubmenu">  
-        <a href="materials.php" class="d-block ps-4 text-sm <?= basename($_SERVER['PHP_SELF']) == 'materials.php' ? 'active' : '' ?>">Add Material</a>
-        <a href="material_categories.php" class="d-block ps-4 text-sm    <?= basename($_SERVER['PHP_SELF']) == 'material_categories.php' ? 'active' : '' ?>">Categories</a>
+        <a href="materials.php" class="d-block ps-4 text-sm submenu-link <?= basename($_SERVER['PHP_SELF']) == 'materials.php' ? 'active' : '' ?>">Add Material</a>
+        <a href="material_categories.php" class="d-block ps-4 text-sm submenu-link <?= basename($_SERVER['PHP_SELF']) == 'material_categories.php' ? 'active' : '' ?>">Categories</a>
     </div>
 
-    <!-- Expenses -->
+    <a href="customers.php" class="<?= in_array(basename($_SERVER['PHP_SELF']), ['customers.php']) ? 'active' : '' ?>">
+        <i class="icon bi bi-person-raised-hand text-indigo-500"></i>
+        <span class="text">Customers</span>
+    </a>
+
     <a href="expenses.php" class="<?= in_array(basename($_SERVER['PHP_SELF']), ['expenses.php']) ? 'active' : '' ?>">
         <i class="icon fa-solid fa-money-bill-1-wave text-amber-500"></i>
         <span class="text">Expenses</span>
     </a>
-</div>
 
+    
+
+    <!-- Logout Button -->
+    <button id="logoutBtn" class="btn btn-danger w-100 d-flex align-items-center mt-3">
+        <i class="fa-solid fa-box-arrow-right me-2"></i> Logout
+    </button>
+</div>
