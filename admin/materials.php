@@ -109,7 +109,7 @@ $account_info = getAccountInfo($conn);
 
     <?php require '../inc/javascripts.php'; ?>
     <script src="../public/js/index_logout.js"></script>
-    <script src="../public/js/admin_materials.js"></script>
+    <script src="../public/js/admin_datatables.js"></script>
 </body>
 
 </html>

@@ -28,10 +28,18 @@
         <a href="material_categories.php" class="d-block ps-4 text-sm submenu-link <?= basename($_SERVER['PHP_SELF']) == 'material_categories.php' ? 'active' : '' ?>">Categories</a>
     </div>
 
-    <a href="customers.php" class="<?= in_array(basename($_SERVER['PHP_SELF']), ['customers.php']) ? 'active' : '' ?>">
+    <!-- Customers with Submenu -->
+    <a href="#customersSubmenu" class="d-flex align-items-center" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="customersSubmenu">
         <i class="icon bi bi-person-raised-hand text-indigo-500"></i>
-        <span class="text">Customers</span>
+        <span class="text ms-2">Customers</span>
+        <i class="fas fa-chevron-down ms-auto"></i>
     </a>
+    <div class="collapse ps-4 mt-1 <?= in_array(basename($_SERVER['PHP_SELF']), ['customers.php', 'all_transactions.php', 'transaction_categories.php']) ? 'show' : '' ?>" id="customersSubmenu">  
+        <a href="customers.php" class="d-block ps-4 text-sm submenu-link <?= basename($_SERVER['PHP_SELF']) == 'customers.php' ? 'active' : '' ?>">Customers</a>
+        <a href="all_transactions.php" class="d-block ps-4 text-sm submenu-link <?= basename($_SERVER['PHP_SELF']) == 'all_transactions.php' ? 'active' : '' ?>">Transactions</a>
+        <a href="transaction_categories.php" class="d-block ps-4 text-sm submenu-link <?= basename($_SERVER['PHP_SELF']) == 'transaction_categories.php' ? 'active' : '' ?>">Transaction Categories</a>
+    </div>
+
 
     <a href="expenses.php" class="<?= in_array(basename($_SERVER['PHP_SELF']), ['expenses.php']) ? 'active' : '' ?>">
         <i class="icon fa-solid fa-money-bill-1-wave text-amber-500"></i>
