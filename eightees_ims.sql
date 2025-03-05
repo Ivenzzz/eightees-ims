@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 27, 2025 at 03:40 AM
+-- Generation Time: Mar 05, 2025 at 06:14 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -54,24 +54,25 @@ CREATE TABLE `customers` (
   `name` varchar(255) NOT NULL,
   `phone` varchar(50) DEFAULT NULL,
   `address` text DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `customers`
 --
 
-INSERT INTO `customers` (`customer_id`, `name`, `phone`, `address`, `created_at`) VALUES
-(1, 'John Doe', '09123456789', '123 Rizal Street, Barangay 6, Victorias City', '2025-02-27 01:52:56'),
-(2, 'Jane Smith', '09234567890', '456 Burgos Avenue, Barangay 19-A, Victorias City', '2025-02-27 01:52:56'),
-(3, 'Alice Johnson', '09345678901', '789 Osmeña Street, Barangay 7, Victorias City', '2025-02-27 01:52:56'),
-(4, 'Bob Brown', '09456789012', '159 Mabini Street, Barangay 1 Poblacion, E.B. Magalona', '2025-02-27 01:52:56'),
-(5, 'Charlie White', '09567890123', '753 Lopez Jaena Street, Barangay Alicante, E.B. Magalona', '2025-02-27 01:52:56'),
-(6, 'David Black', '09678901234', '852 Bonifacio Street, Barangay Consing, E.B. Magalona', '2025-02-27 01:52:56'),
-(7, 'Emma Green', '09789012345', '369 Rizal Street, Barangay Mambulac, Silay City', '2025-02-27 01:52:56'),
-(8, 'Frank Adams', '09890123456', '951 Lacson Street, Barangay Guinhalaran, Silay City', '2025-02-27 01:52:56'),
-(9, 'Grace Lee', '09901234567', '753 Zamora Street, Barangay 2, Silay City', '2025-02-27 01:52:56'),
-(10, 'Henry Clark', '09012345678', '852 Araneta Street, Barangay Hawaiian, Silay City', '2025-02-27 01:52:56');
+INSERT INTO `customers` (`customer_id`, `name`, `phone`, `address`, `created_at`, `updated_at`) VALUES
+(1, 'John Doe', '09308309634', '123 Rizal Street, Poblacion II, E.B. Magalona', '2025-02-27 01:52:56', '2025-03-03 03:02:35'),
+(2, 'Jane Smith', '09234567890', '456 Burgos Avenue, Barangay 19-A, Victorias City', '2025-02-27 01:52:56', '2025-03-03 02:57:29'),
+(3, 'Alice Johnson', '09345678901', '789 Osmeña Street, Barangay 7, Victorias City', '2025-02-27 01:52:56', '2025-03-03 02:57:29'),
+(4, 'Bob Brown', '09456789012', '159 Mabini Street, Barangay 1 Poblacion, E.B. Magalona', '2025-02-27 01:52:56', '2025-03-03 02:57:29'),
+(5, 'Charlie White', '09567890123', '753 Lopez Jaena Street, Barangay Alicante, E.B. Magalona', '2025-02-27 01:52:56', '2025-03-03 02:57:29'),
+(6, 'David Black', '09678901234', '852 Bonifacio Street, Barangay Consing, E.B. Magalona', '2025-02-27 01:52:56', '2025-03-03 02:57:29'),
+(7, 'Emma Green', '09789012345', '369 Rizal Street, Barangay Mambulac, Silay City', '2025-02-27 01:52:56', '2025-03-03 02:57:29'),
+(8, 'Frank Adams', '09890123456', '951 Lacson Street, Barangay Guinhalaran, Silay City', '2025-02-27 01:52:56', '2025-03-03 02:57:29'),
+(9, 'Grace Lee', '09901234567', '753 Zamora Street, Barangay 2, Silay City', '2025-02-27 01:52:56', '2025-03-03 02:57:29'),
+(10, 'Henry Clark', '09012345678', '852 Araneta Street, Barangay Hawaiian, Silay City', '2025-02-27 01:52:56', '2025-03-03 02:57:29');
 
 -- --------------------------------------------------------
 
@@ -101,21 +102,6 @@ CREATE TABLE `expense_categories` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `gains_losses`
---
-
-CREATE TABLE `gains_losses` (
-  `report_id` int(11) NOT NULL,
-  `order_id` int(11) DEFAULT NULL,
-  `total_revenue` decimal(10,2) NOT NULL,
-  `total_expense` decimal(10,2) NOT NULL,
-  `net_profit` decimal(10,2) GENERATED ALWAYS AS (`total_revenue` - `total_expense`) STORED,
-  `report_date` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `materials`
 --
 
@@ -129,24 +115,19 @@ CREATE TABLE `materials` (
   `total_price` decimal(10,2) NOT NULL,
   `purchase_date` timestamp NOT NULL DEFAULT current_timestamp(),
   `supplier` varchar(100) NOT NULL,
-  `last_updated` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `materials`
 --
 
-INSERT INTO `materials` (`material_id`, `category_id`, `name`, `description`, `amount`, `quantity`, `total_price`, `purchase_date`, `supplier`, `last_updated`) VALUES
-(11, 1, 'Polydex', '180GSM', 3000.00, 3.00, 9000.00, '2024-02-20 02:30:00', 'ABC Textiles', '2025-02-27 02:36:01'),
-(12, 1, 'Polydex', '140GSM', 4500.00, 5.00, 22500.00, '2024-02-18 06:45:00', 'XYZ Clothing', '2025-02-27 02:35:48'),
-(13, 2, 'Vinyl Heat Transfer', 'High-quality vinyl for heat transfer', 200.00, 20.00, 4000.00, '2024-02-15 01:20:00', 'PrintTech Supplies', '2025-02-27 02:32:14'),
-(14, 2, 'Screen Printing Ink', '500ML', 500.00, 10.00, 5000.00, '2024-02-12 04:00:00', 'InkWorld Ltd.', '2025-02-27 02:32:14'),
-(15, 3, 'Heat Press Machine', 'Digital heat press machine for t-shirts', 15000.00, 2.00, 30000.00, '2024-02-10 00:15:00', 'Machinery Hub', '2025-02-27 02:32:14'),
-(16, 3, 'Sublimation Paper', 'High-quality sublimation transfer paper', 250.00, 15.00, 3750.00, '2024-02-08 08:30:00', 'PrintSupply Co.', '2025-02-27 02:32:14'),
-(17, 4, 'Tarpaulin Roll', 'Large-format tarpaulin for printing', 5000.00, 5.00, 25000.00, '2024-02-05 02:00:00', 'BigPrint Materials', '2025-02-27 02:32:14'),
-(18, 4, 'Banner Stands', 'Adjustable stands for banners', 1200.00, 4.00, 4800.00, '2024-02-02 03:50:00', 'Display Solutions', '2025-02-27 02:32:14'),
-(19, 5, 'Fabric Ink', 'Premium ink for fabric printing', 750.00, 6.00, 4500.00, '2024-01-30 06:10:00', 'ColorTech Inc.', '2025-02-27 02:32:14'),
-(20, 5, 'Embroidery Thread', 'Assorted colors of embroidery threads', 100.00, 100.00, 10000.00, '2024-01-28 01:00:00', 'ThreadMaster', '2025-02-27 02:32:14');
+INSERT INTO `materials` (`material_id`, `category_id`, `name`, `description`, `amount`, `quantity`, `total_price`, `purchase_date`, `supplier`, `created_at`, `updated_at`) VALUES
+(12, 1, 'Polydex', '140GSM', 4500.00, 5.00, 22500.00, '2024-02-18 06:45:00', 'XYZ Clothing', '2025-02-27 02:35:48', '2025-02-27 07:12:49'),
+(23, 1, 'Polydex', '180gsm', 3075.00, 2.00, 6150.00, '2025-02-27 03:50:57', 'Graphic Solutions Inc.', '2025-02-27 07:16:53', '2025-02-27 07:16:53'),
+(24, 1, 'Polydex', '170GSM', 3250.00, 3.00, 9750.00, '2025-02-27 07:18:14', 'Graphic Solutions Inc.', '2025-02-27 07:31:23', '2025-02-27 07:31:23'),
+(25, 1, 'Polydex', '170GSM', 3000.00, 4.00, 12000.00, '2025-02-27 07:32:52', 'Graphic Solutions Inc.', '2025-02-27 07:32:52', '2025-02-27 07:32:52');
 
 -- --------------------------------------------------------
 
@@ -164,58 +145,68 @@ CREATE TABLE `material_categories` (
 --
 
 INSERT INTO `material_categories` (`category_id`, `category_name`) VALUES
-(6, 'Adhesives'),
 (1, 'Fabric'),
-(5, 'Heat Transfer Paper'),
-(2, 'Ink'),
-(7, 'Packaging Materials'),
-(8, 'Printing Accessories'),
-(3, 'Threads'),
-(4, 'Vinyl');
+(16, 'Ink'),
+(10, 'Sublimation Paper');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `orders`
+-- Table structure for table `project_transactions`
 --
 
-CREATE TABLE `orders` (
-  `order_id` int(11) NOT NULL,
-  `customer_id` int(11) DEFAULT NULL,
-  `order_status` enum('Pending','Completed','Cancelled') DEFAULT 'Pending',
-  `order_date` timestamp NOT NULL DEFAULT current_timestamp(),
-  `delivery_date` timestamp NULL DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `order_items`
---
-
-CREATE TABLE `order_items` (
-  `order_item_id` int(11) NOT NULL,
-  `order_id` int(11) DEFAULT NULL,
-  `size` varchar(255) NOT NULL,
+CREATE TABLE `project_transactions` (
+  `project_transaction_id` int(11) NOT NULL,
+  `transaction_date` date NOT NULL DEFAULT current_timestamp(),
+  `customer_id` int(11) NOT NULL,
+  `team_name` varchar(100) NOT NULL,
+  `category_id` int(11) NOT NULL,
+  `description` varchar(100) DEFAULT NULL,
+  `design_file` varchar(255) DEFAULT NULL,
   `quantity` int(11) NOT NULL,
-  `price_per_unit` decimal(10,2) NOT NULL,
-  `total_price` decimal(10,2) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `amount` decimal(10,2) NOT NULL,
+  `downpayment` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `total` decimal(10,2) NOT NULL,
+  `payable` decimal(10,2) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `project_transactions`
+--
+
+INSERT INTO `project_transactions` (`project_transaction_id`, `transaction_date`, `customer_id`, `team_name`, `category_id`, `description`, `design_file`, `quantity`, `amount`, `downpayment`, `total`, `payable`, `created_at`, `updated_at`) VALUES
+(37, '2025-03-02', 2, 'Team Beta', 3, 'Polo Shirts', 'design2.png', 30, 150.00, 1500.00, 4500.00, 3000.00, '2025-03-05 02:51:47', '2025-03-05 02:51:47'),
+(38, '2025-03-03', 3, 'Team Gamma', 1, 'Event Shirts', 'design3.png', 100, 120.00, 2000.00, 12000.00, 10000.00, '2025-03-05 02:51:47', '2025-03-05 02:51:47'),
+(39, '2025-03-04', 4, 'Team Delta', 2, 'Custom Jerseys', 'design4.png', 20, 125.00, 500.00, 2500.00, 2000.00, '2025-03-05 02:51:47', '2025-03-05 02:51:47'),
+(40, '2025-03-05', 5, 'Team Epsilon', 5, 'Tarpaulin Printing', 'design5.png', 10, 200.00, 800.00, 2000.00, 1200.00, '2025-03-05 02:51:47', '2025-03-05 02:51:47'),
+(41, '2025-03-06', 6, 'Team Zeta', 3, 'Custom Hoodies', 'design6.png', 15, 250.00, 1000.00, 3750.00, 2750.00, '2025-03-05 02:51:47', '2025-03-05 02:51:47'),
+(42, '2025-03-07', 7, 'Team Eta', 1, 'School T-Shirts', 'design7.png', 80, 90.00, 1800.00, 7200.00, 5400.00, '2025-03-05 02:51:47', '2025-03-05 02:51:47'),
+(43, '2025-03-08', 8, 'Team Theta', 2, 'Corporate Uniforms', 'design8.png', 25, 200.00, 1200.00, 5000.00, 3800.00, '2025-03-05 02:51:47', '2025-03-05 02:51:47'),
+(44, '2025-03-09', 9, 'Team Idlfta', 3, 'Athletic Wear', 'design9.png', 40, 180.00, 2000.00, 7200.00, 5200.00, '2025-03-05 02:51:47', '2025-03-05 02:51:47'),
+(45, '2025-03-10', 10, 'Team Kappa', 5, 'Large Banner Print', 'storage/uploads/1741151382_tshirt3.jpg', 5, 300.00, 1000.00, 1500.00, 500.00, '2025-03-05 02:51:47', '2025-03-05 05:09:42');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sales`
+-- Table structure for table `transaction_categories`
 --
 
-CREATE TABLE `sales` (
-  `sale_id` int(11) NOT NULL,
-  `order_id` int(11) DEFAULT NULL,
-  `total_revenue` decimal(10,2) NOT NULL,
-  `sale_date` timestamp NOT NULL DEFAULT current_timestamp()
+CREATE TABLE `transaction_categories` (
+  `category_id` int(11) NOT NULL,
+  `category_name` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `transaction_categories`
+--
+
+INSERT INTO `transaction_categories` (`category_id`, `category_name`) VALUES
+(1, 'T-Shirts'),
+(2, 'Jersey'),
+(3, 'Polo'),
+(5, 'Long Pants');
 
 --
 -- Indexes for dumped tables
@@ -248,12 +239,6 @@ ALTER TABLE `expense_categories`
   ADD UNIQUE KEY `category_name` (`category_name`);
 
 --
--- Indexes for table `gains_losses`
---
-ALTER TABLE `gains_losses`
-  ADD PRIMARY KEY (`report_id`);
-
---
 -- Indexes for table `materials`
 --
 ALTER TABLE `materials`
@@ -268,23 +253,18 @@ ALTER TABLE `material_categories`
   ADD UNIQUE KEY `category_name` (`category_name`);
 
 --
--- Indexes for table `orders`
+-- Indexes for table `project_transactions`
 --
-ALTER TABLE `orders`
-  ADD PRIMARY KEY (`order_id`),
-  ADD KEY `fk_orders_customersId` (`customer_id`);
+ALTER TABLE `project_transactions`
+  ADD PRIMARY KEY (`project_transaction_id`),
+  ADD KEY `fk_project_transaction_customer_id` (`customer_id`),
+  ADD KEY `fk_project_transaction_category_id` (`category_id`);
 
 --
--- Indexes for table `order_items`
+-- Indexes for table `transaction_categories`
 --
-ALTER TABLE `order_items`
-  ADD PRIMARY KEY (`order_item_id`);
-
---
--- Indexes for table `sales`
---
-ALTER TABLE `sales`
-  ADD PRIMARY KEY (`sale_id`);
+ALTER TABLE `transaction_categories`
+  ADD PRIMARY KEY (`category_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -300,7 +280,7 @@ ALTER TABLE `accounts`
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `expenses`
@@ -315,40 +295,28 @@ ALTER TABLE `expense_categories`
   MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `gains_losses`
---
-ALTER TABLE `gains_losses`
-  MODIFY `report_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `materials`
 --
 ALTER TABLE `materials`
-  MODIFY `material_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `material_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `material_categories`
 --
 ALTER TABLE `material_categories`
-  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
--- AUTO_INCREMENT for table `orders`
+-- AUTO_INCREMENT for table `project_transactions`
 --
-ALTER TABLE `orders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `project_transactions`
+  MODIFY `project_transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
--- AUTO_INCREMENT for table `order_items`
+-- AUTO_INCREMENT for table `transaction_categories`
 --
-ALTER TABLE `order_items`
-  MODIFY `order_item_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `sales`
---
-ALTER TABLE `sales`
-  MODIFY `sale_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `transaction_categories`
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables
@@ -367,10 +335,11 @@ ALTER TABLE `materials`
   ADD CONSTRAINT `fk_materials_categoryId` FOREIGN KEY (`category_id`) REFERENCES `material_categories` (`category_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `orders`
+-- Constraints for table `project_transactions`
 --
-ALTER TABLE `orders`
-  ADD CONSTRAINT `fk_orders_customersId` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`customer_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `project_transactions`
+  ADD CONSTRAINT `fk_project_transaction_category_id` FOREIGN KEY (`category_id`) REFERENCES `transaction_categories` (`category_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_project_transaction_customer_id` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`customer_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

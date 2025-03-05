@@ -24,7 +24,7 @@ function getAllTransactions($conn)
 function getTransactionCategories($conn)
 {
     $categories = [];
-    $sql = "SELECT category_id, category_name FROM transaction_categories ORDER BY category_name ASC";
+    $sql = "SELECT category_id, category_name FROM transaction_categories ORDER BY category_id DESC";
 
     if ($result = $conn->query($sql)) {
         while ($row = $result->fetch_assoc()) {

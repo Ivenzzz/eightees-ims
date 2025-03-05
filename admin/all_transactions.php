@@ -3,8 +3,10 @@ session_start();
 
 require '../inc/database.php';
 require '../models/admin_transactions.php';
+require '../models/admin_account.php';
 
 $title = 'All Transactions';
+$account_info = getAccountInfo($conn);
 $transactions = getAllTransactions($conn);
 ?>
 
@@ -36,59 +38,86 @@ $transactions = getAllTransactions($conn);
             <div class="row mb-4">
                 <div class="col-md-12">
                     <div class="card shadow">
-                        <div class="card-header bg-primary text-white">
+                        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                             <h5 class="mb-0">All Transactions</h5>
+                            <div>
+                                <a href="transaction_categories.php" class="btn btn-light btn-sm">
+                                    <i class="bi bi-box-arrow-up-right"></i> Categories
+                                </a>
+                                <button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#addTransactionModal">
+                                    <i class="bi bi-plus-circle"></i> Add Transaction
+                                </button>
+                            </div>
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive">
-                                <table id="transactionsTable" class="table table-bordered table-hover text-xs">
-                                    <thead class="table-dark">
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Transaction Date</th>
-                                            <th>Customer</th>
-                                            <th>Team Name</th>
-                                            <th>Category</th>
-                                            <th>Description</th>
-                                            <th>Quantity</th>
-                                            <th>Amount</th>
-                                            <th>Total</th>
-                                            <th>Payable</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php if (!empty($transactions)) : ?>
-                                            <?php foreach ($transactions as $index => $transaction) : ?>
-                                                <tr>
-                                                    <td><?= $index + 1 ?></td>
-                                                    <td><?= htmlspecialchars(date('F j, Y', strtotime($transaction['transaction_date']))) ?></td>
-                                                    <td><?= htmlspecialchars($transaction['customer_name']) ?></td>
-                                                    <td><?= htmlspecialchars($transaction['team_name']) ?></td>
-                                                    <td><?= htmlspecialchars($transaction['category_name']) ?></td>
-                                                    <td><?= htmlspecialchars($transaction['description']) ?></td>
-                                                    <td><?= htmlspecialchars($transaction['quantity']) ?></td>
-                                                    <td><?= number_format($transaction['amount'], 2) ?></td>
-                                                    <td><?= number_format($transaction['total'], 2) ?></td>
-                                                    <td><?= number_format($transaction['payable'], 2) ?></td>
-                                                    <td>
-                                                        <button class="btn btn-warning btn-sm mb-2">
-                                                            <i class="bi bi-pencil-square"></i> <!-- Edit Icon -->
+                            <table id="transactionsTable" class="table text-xs">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Transaction Date</th>
+                                        <th>Customer</th>
+                                        <th>Team Name</th>
+                                        <th>Category</th>
+                                        <th>Description</th>
+                                        <th>Design</th>
+                                        <th>Quantity</th>
+                                        <th>Amount</th>
+                                        <th>Total</th>
+                                        <th>Downpayment</th>
+                                        <th>Payable</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php if (!empty($transactions)) : ?>
+                                        <?php foreach ($transactions as $index => $transaction) : ?>
+                                            <tr>
+                                                <td><?= $index + 1 ?></td>
+                                                <td><?= htmlspecialchars(date('F j, Y', strtotime($transaction['transaction_date']))) ?></td>
+                                                <td><?= htmlspecialchars($transaction['customer_name']) ?></td>
+                                                <td><?= htmlspecialchars($transaction['team_name']) ?></td>
+                                                <td><?= htmlspecialchars($transaction['category_name']) ?></td>
+                                                <td><?= htmlspecialchars($transaction['description']) ?></td>
+                                                <td>
+                                                    <?php if (isset($transaction['design_file']) && !empty($transaction['design_file'])): ?>
+                                                        <span class="design-hoverable"
+                                                            data-bs-toggle="popover"
+                                                            data-bs-trigger="hover focus"
+                                                            data-bs-html="true"
+                                                            data-bs-content="<img src='<?= htmlspecialchars($transaction['design_file']) ?>' width='1000px' class='img-fluid'>">
+                                                            <a href="">Available</a>
+                                                        </span>
+                                                    <?php else: ?>
+                                                        <span class="text-muted">Unavailable</span>
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td><?= htmlspecialchars($transaction['quantity']) ?></td>
+                                                <td><?= number_format($transaction['amount'], 2) ?></td>
+                                                <td><?= number_format($transaction['total'], 2) ?></td>
+                                                <td><?= number_format($transaction['downpayment'], 2) ?></td>
+                                                <td><?= number_format($transaction['payable'], 2) ?></td>
+                                                <td>
+                                                    <button class="btn btn-warning btn-sm mb-2" data-bs-toggle="modal" data-bs-target="#editTransactionModal<?= $transaction['project_transaction_id'] ?>">
+                                                        <i class="bi bi-pencil-square"></i> Edit
+                                                    </button>
+                                                    <form action="../controllers/admin_delete_transaction.php" method="POST" style="display:inline;">
+                                                        <input type="hidden" name="transaction_id" value="<?= $transaction['project_transaction_id'] ?>">
+                                                        <button type="submit" class="btn btn-danger btn-sm mb-2" onclick="return confirm('Are you sure you want to delete this transaction?');">
+                                                            <i class="bi bi-trash"></i>
                                                         </button>
-                                                        <form action="../controllers/admin_delete_transaction.php" method="POST" style="display:inline;">
-                                                            <input type="hidden" name="transaction_id" value="<?= $transaction['project_transaction_id'] ?>">
-                                                            <button type="submit" class="btn btn-danger btn-sm mb-2" onclick="return confirm('Are you sure you want to delete this transaction?');">
-                                                                <i class="bi bi-trash"></i> <!-- Delete Icon -->
-                                                            </button>
-                                                        </form>
-                                                    </td>
-                                                </tr>
-                                            <?php endforeach; ?>
-                                        <?php else : ?>
-                                        <?php endif; ?>
-                                    </tbody>
-                                </table>
-                            </div>
+                                                    </form>
+                                                    <button class="btn btn-success btn-sm mb-2" data-bs-toggle="modal" data-bs-target="#addDownpaymentModal<?= $transaction['project_transaction_id'] ?>">
+                                                        <i class="bi bi-cash-stack"></i> Add Downpayment
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <?php require 'partials/modal_add_downpayment.php'; ?>
+                                            <?php require 'partials/modal_edit_transaction.php'; ?>
+                                        <?php endforeach; ?>
+                                    <?php else : ?>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -99,6 +128,8 @@ $transactions = getAllTransactions($conn);
 
     <?php require '../inc/javascripts.php'; ?>
     <script src="../public/js/admin_datatables.js"></script>
+    <script src="../public/js/admin_all_transactions.js"></script>
+    <script src="../public/js/admin_all_transactions.js"></script>
 </body>
 
 </html>
