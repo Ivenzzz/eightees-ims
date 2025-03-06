@@ -453,7 +453,7 @@ a {
 }
 
 .login-form {
-    background: #ffffff;
+    background: oklch(0.968 0.007 247.896);
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.1);
