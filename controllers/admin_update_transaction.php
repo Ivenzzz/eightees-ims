@@ -14,6 +14,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $total = $quantity * $amount;
     $payable = max(0, $total - $downpayment); // Ensure payable is not negative
 
+    // Get previous page URL or set a default fallback
+    $previous_page = $_SERVER['HTTP_REFERER'] ?? '../admin/all_transactions.php';
+
     $upload_dir = '/eightees_ims/storage/uploads/';
     $design_file = null;
 
@@ -30,10 +33,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (move_uploaded_file($file_tmp, $_SERVER['DOCUMENT_ROOT'] . $file_path)) {
                 $design_file = $file_path;
             } else {
-                die('Error uploading file.');
+                header("Location: $previous_page?error=Error uploading file.");
+                exit();
             }
         } else {
-            die('Invalid file type. Allowed types: jpg, jpeg, png, pdf, ai, eps.');
+            header("Location: $previous_page?error=Invalid file type. Allowed types: jpg, jpeg, png, pdf, ai, eps.");
+            exit();
         }
     }
 
@@ -56,13 +61,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($stmt->execute()) {
-            header("Location: ../admin/all_transactions.php?success=Transaction updated successfully");
+            header("Location: $previous_page?success=Transaction updated successfully");
             exit();
         } else {
-            die("Error updating record: " . $stmt->error);
+            header("Location: $previous_page?error=Error updating record: " . urlencode($stmt->error));
+            exit();
         }
     } else {
-        die("Database error: " . $conn->error);
+        header("Location: $previous_page?error=Database error: " . urlencode($conn->error));
+        exit();
     }
 }
 ?>

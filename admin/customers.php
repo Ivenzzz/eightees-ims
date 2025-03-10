@@ -70,7 +70,9 @@ $customers = getCustomers($conn);
                                                     <td><?= htmlspecialchars($customer['phone']) ?></td>
                                                     <td><?= htmlspecialchars($customer['address']) ?></td>
                                                     <td>
-                                                        <button class="btn btn-info btn-sm">View Transactions</button>
+                                                        <a href="customer_transactions.php?customer_id=<?= $customer['customer_id'] ?>" class="btn btn-info btn-sm">
+                                                            View Transactions
+                                                        </a>
                                                         <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editCustomerModal<?= $customer['customer_id'] ?>">
                                                             <i class="bi bi-pencil-square"></i> <!-- Edit Icon -->
                                                         </button>
@@ -107,7 +109,7 @@ $customers = getCustomers($conn);
 
                                                                     <div class="mb-3">
                                                                         <label for="address<?= $customer['customer_id'] ?>" class="form-label">Address</label>
-                                                                        <input type="text" class="form-control" id="address<?= $customer['customer_id'] ?>" name="address" value="<?= $customer['address'] ?>"> 
+                                                                        <input type="text" class="form-control" id="address<?= $customer['customer_id'] ?>" name="address" value="<?= htmlspecialchars($customer['address']) ?>">
                                                                     </div>
                                                                 </div>
                                                                 <div class="modal-footer">
@@ -126,6 +128,7 @@ $customers = getCustomers($conn);
                                             </tr>
                                         <?php endif; ?>
                                     </tbody>
+
                                 </table>
                             </div>
                         </div>

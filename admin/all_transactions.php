@@ -20,6 +20,16 @@ $transaction_categories = getTransactionCategories($conn);
 <head>
     <?php require '../inc/head.php'; ?>
     <link rel="stylesheet" href="../public/css/main.css">
+    <style>
+        #customer_list {
+            z-index: 1000;
+            max-height: 200px;
+            overflow-y: auto;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 
 <body class="poppins-regular">
@@ -130,92 +140,65 @@ $transaction_categories = getTransactionCategories($conn);
         </div>
     </div>
 
-    <!-- Add Transaction Modal -->
-    <div class="modal fade" id="addTransactionModal" tabindex="-1" aria-labelledby="addTransactionModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addTransactionModalLabel">Add New Transaction</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="addTransactionForm" method="POST" action="../controllers/admin_add_transaction.php">
-                        <div class="mb-3">
-                            <label for="transaction_date" class="form-label">Transaction Date</label>
-                            <input type="date" class="form-control" id="transaction_date" name="transaction_date" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="customer_id" class="form-label">Customer</label>
-                            <select class="form-select" id="customer_id" name="customer_id" required>
-                                <option value="" disabled selected>Select Customer</option>
-                                <?php foreach ($customers as $customer): ?>
-                                    <option value="<?= $customer['customer_id'] ?>"><?= htmlspecialchars($customer['name']) ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="team_name" class="form-label">Team Name</label>
-                            <input type="text" class="form-control" id="team_name" name="team_name" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="category_id" class="form-label">Category</label>
-                            <select class="form-select" id="category_id" name="category_id" required>
-                                <option value="" disabled selected>Select Category</option>
-                                <?php foreach ($transaction_categories as $category): ?>
-                                    <option value="<?= $category['category_id'] ?>"><?= htmlspecialchars($category['category_name']) ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="description" class="form-label">Description</label>
-                            <input type="text" class="form-control" id="description" name="description">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="design_file" class="form-label">Design File</label>
-                            <input type="file" class="form-control" id="design_file" name="design_file">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="quantity" class="form-label">Quantity</label>
-                            <input type="number" class="form-control" id="quantity" name="quantity" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="amount" class="form-label">Amount</label>
-                            <input type="number" step="0.01" class="form-control" id="amount" name="amount" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="downpayment" class="form-label">Downpayment</label>
-                            <input type="number" step="0.01" class="form-control" id="downpayment" name="downpayment" value="0.00">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="due_date" class="form-label">Due Date</label>
-                            <input type="datetime-local" class="form-control" id="due_date" name="due_date" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="start_date" class="form-label">Start Date</label>
-                            <input type="datetime-local" class="form-control" id="start_date" name="start_date" required>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary w-100">Add Transaction</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+    <?php require 'partials/modal_add_transaction.php'; ?>
 
     <?php require '../inc/javascripts.php'; ?>
     <script src="../public/js/admin_datatables.js"></script>
     <script src="../public/js/admin_all_transactions.js"></script>
-    <script src="../public/js/admin_all_transactions.js"></script>
+    <script>
+        document.getElementById("customer_search").addEventListener("input", function() {
+            const searchValue = this.value.trim();
+            const customerList = document.getElementById("customer_list");
+
+            if (searchValue.length < 2) {
+                customerList.innerHTML = ''; // Clear suggestions if input is too short
+                return;
+            }
+
+            fetch(`../api/admin_get_customers.php?search=${encodeURIComponent(searchValue)}`)
+                .then(response => response.json())
+                .then(data => {
+                    customerList.innerHTML = ''; // Clear previous suggestions
+
+                    data.forEach(customer => {
+                        const div = document.createElement("div");
+                        div.classList.add("list-group-item", "list-group-item-action");
+                        div.textContent = customer.name;
+                        div.dataset.id = customer.customer_id;
+
+                        // Handle customer selection
+                        div.addEventListener("click", function() {
+                            document.getElementById("customer_search").value = this.textContent;
+                            document.getElementById("customer_id").value = this.dataset.id;
+                            customerList.innerHTML = ''; // Hide the list after selection
+                        });
+
+                        customerList.appendChild(div);
+                    });
+                })
+                .catch(error => console.error("Error fetching customers:", error));
+        });
+
+        // Hide suggestions when clicking outside
+        document.addEventListener("click", function(event) {
+            if (!document.getElementById("customer_search").contains(event.target)) {
+                document.getElementById("customer_list").innerHTML = '';
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const now = new Date();
+            const future = new Date(now);
+            future.setDate(now.getDate() + 3); // Add 3 days for due date
+
+            // Format date to YYYY-MM-DDTHH:MM for datetime-local input
+            const formatDateTime = (date) => date.toISOString().slice(0, 16);
+
+            document.getElementById("start_date").value = formatDateTime(now);
+            document.getElementById("due_date").value = formatDateTime(future);
+        });
+    </script>
 </body>
 
 </html>

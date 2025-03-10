@@ -5,6 +5,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $transaction_id = $_POST['transaction_id'];
     $new_downpayment = floatval($_POST['new_downpayment']); // Ensure the input is a valid float
 
+    // Get previous page URL or set a default fallback
+    $previous_page = $_SERVER['HTTP_REFERER'] ?? '../admin/all_transactions.php';
+
     if ($transaction_id && $new_downpayment > 0) {
         // Fetch current downpayment, total, and payable amount
         $stmt = $conn->prepare("SELECT downpayment, total, payable FROM project_transactions WHERE project_transaction_id = ?");
@@ -18,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Ensure downpayment does not exceed the remaining payable
             if ($new_downpayment > $payable) {
                 $conn->close();
-                header("Location: ../admin/all_transactions.php?error=Downpayment cannot exceed the remaining balance.");
+                header("Location: $previous_page?error=Downpayment cannot exceed the remaining balance.");
                 exit();
             }
 
@@ -32,21 +35,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($updateStmt->execute()) {
                 $updateStmt->close();
                 $conn->close();
-                header("Location: ../admin/all_transactions.php?success=Downpayment updated successfully");
+                header("Location: $previous_page?success=Downpayment updated successfully");
                 exit();
             } else {
                 $updateStmt->close();
                 $conn->close();
-                header("Location: ../admin/all_transactions.php?error=Failed to update downpayment");
+                header("Location: $previous_page?error=Failed to update downpayment");
                 exit();
             }
         } else {
             $conn->close();
-            header("Location: ../admin/all_transactions.php?error=Transaction not found");
+            header("Location: $previous_page?error=Transaction not found");
             exit();
         }
     } else {
-        header("Location: ../admin/all_transactions.php?error=Invalid input");
+        header("Location: $previous_page?error=Invalid input");
         exit();
     }
 } else {
