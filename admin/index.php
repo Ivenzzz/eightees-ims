@@ -2,7 +2,7 @@
 
 session_start();
 
-$title = 'Admin Dashboard';
+$title = 'Dashboard';
 
 require '../inc/database.php';
 require '../models/admin_account.php';
