@@ -1,6 +1,8 @@
 initializeDataTable("transactionsTable");
 initializeDataTable("materialsDataTable");
 initializeDataTable("customersTransactionsTable");
+initializeDataTable("expensesTable");
+initializeDataTable("salariesTable");
 
 function initializeDataTable(tableId) {
     $(document).ready(function() {

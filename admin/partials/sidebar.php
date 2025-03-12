@@ -45,9 +45,14 @@
 
 
 
-    <a href="expenses.php" class="<?= in_array(basename($_SERVER['PHP_SELF']), ['expenses.php']) ? 'active' : '' ?>">
-        <i class="icon fa-solid fa-money-bill-1-wave text-amber-500"></i>
-        <span class="text">Expenses</span>
+    <a href="other_expenses.php" class="<?= in_array(basename($_SERVER['PHP_SELF']), ['other_expenses.php']) ? 'active' : '' ?>">
+        <i class="icon fa-solid fa-money-bill-1-wave text-pink-500"></i>
+        <span class="text">Other Expenses</span>
+    </a>
+
+    <a href="salaries.php" class="<?= in_array(basename($_SERVER['PHP_SELF']), ['salaries.php']) ? 'active' : '' ?>">
+        <i class="icon fa-solid fa-hand-holding-dollar text-yellow-500"></i>
+        <span class="text">Salaries</span>
     </a>
 
 
