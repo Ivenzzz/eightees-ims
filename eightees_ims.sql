@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 05, 2025 at 06:14 AM
+-- Generation Time: Mar 12, 2025 at 06:49 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -77,27 +77,56 @@ INSERT INTO `customers` (`customer_id`, `name`, `phone`, `address`, `created_at`
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `employee_salaries`
+--
+
+CREATE TABLE `employee_salaries` (
+  `salary_id` int(11) NOT NULL,
+  `employee_name` varchar(100) NOT NULL,
+  `salary_period` varchar(7) NOT NULL,
+  `present_days` int(11) NOT NULL DEFAULT 0,
+  `absent_days` int(11) NOT NULL DEFAULT 0,
+  `overtime_hours` int(11) NOT NULL DEFAULT 0,
+  `total_salary` decimal(10,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `employee_salaries`
+--
+
+INSERT INTO `employee_salaries` (`salary_id`, `employee_name`, `salary_period`, `present_days`, `absent_days`, `overtime_hours`, `total_salary`) VALUES
+(1, 'Clint', '2025-03', 12, 2, 4, 4200.00),
+(2, 'Brent', '2025-03', 10, 10, 1, 531.25),
+(3, 'Gerome', '2025-03', 12, 0, 0, 4243.75),
+(4, 'Maylene', '2025-03', 12, 0, 1, 3637.50),
+(5, 'Yahyah', '2025-03', 12, 0, 1, 3637.50),
+(6, 'Emil', '2025-03', 12, 0, 1, 3031.25),
+(7, 'Glen', '2025-03', 12, 0, 1, 3637.50),
+(8, 'Nicole', '2025-03', 12, 0, 1, 3637.50);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `expenses`
 --
 
 CREATE TABLE `expenses` (
   `expense_id` int(11) NOT NULL,
-  `category_id` int(11) DEFAULT NULL,
   `amount` decimal(10,2) NOT NULL,
   `expense_date` timestamp NOT NULL DEFAULT current_timestamp(),
   `description` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
--- --------------------------------------------------------
-
 --
--- Table structure for table `expense_categories`
+-- Dumping data for table `expenses`
 --
 
-CREATE TABLE `expense_categories` (
-  `category_id` int(11) NOT NULL,
-  `category_name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+INSERT INTO `expenses` (`expense_id`, `amount`, `expense_date`, `description`) VALUES
+(2, 15000.00, '2025-03-12 02:35:58', 'New cellphone for business use'),
+(3, 5000.00, '2025-03-12 02:35:58', 'Office rent payment'),
+(4, 1200.00, '2025-03-12 02:35:58', 'Electricity bill for the month'),
+(6, 500.00, '2025-03-12 03:20:37', 'Rice'),
+(7, 1500.00, '2025-03-12 03:22:41', 'Electric Fan');
 
 -- --------------------------------------------------------
 
@@ -168,6 +197,8 @@ CREATE TABLE `project_transactions` (
   `downpayment` decimal(10,2) NOT NULL DEFAULT 0.00,
   `total` decimal(10,2) NOT NULL,
   `payable` decimal(10,2) NOT NULL,
+  `due_date` timestamp NOT NULL DEFAULT current_timestamp(),
+  `start_date` timestamp NOT NULL DEFAULT current_timestamp(),
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
@@ -176,16 +207,18 @@ CREATE TABLE `project_transactions` (
 -- Dumping data for table `project_transactions`
 --
 
-INSERT INTO `project_transactions` (`project_transaction_id`, `transaction_date`, `customer_id`, `team_name`, `category_id`, `description`, `design_file`, `quantity`, `amount`, `downpayment`, `total`, `payable`, `created_at`, `updated_at`) VALUES
-(37, '2025-03-02', 2, 'Team Beta', 3, 'Polo Shirts', 'design2.png', 30, 150.00, 1500.00, 4500.00, 3000.00, '2025-03-05 02:51:47', '2025-03-05 02:51:47'),
-(38, '2025-03-03', 3, 'Team Gamma', 1, 'Event Shirts', 'design3.png', 100, 120.00, 2000.00, 12000.00, 10000.00, '2025-03-05 02:51:47', '2025-03-05 02:51:47'),
-(39, '2025-03-04', 4, 'Team Delta', 2, 'Custom Jerseys', 'design4.png', 20, 125.00, 500.00, 2500.00, 2000.00, '2025-03-05 02:51:47', '2025-03-05 02:51:47'),
-(40, '2025-03-05', 5, 'Team Epsilon', 5, 'Tarpaulin Printing', 'design5.png', 10, 200.00, 800.00, 2000.00, 1200.00, '2025-03-05 02:51:47', '2025-03-05 02:51:47'),
-(41, '2025-03-06', 6, 'Team Zeta', 3, 'Custom Hoodies', 'design6.png', 15, 250.00, 1000.00, 3750.00, 2750.00, '2025-03-05 02:51:47', '2025-03-05 02:51:47'),
-(42, '2025-03-07', 7, 'Team Eta', 1, 'School T-Shirts', 'design7.png', 80, 90.00, 1800.00, 7200.00, 5400.00, '2025-03-05 02:51:47', '2025-03-05 02:51:47'),
-(43, '2025-03-08', 8, 'Team Theta', 2, 'Corporate Uniforms', 'design8.png', 25, 200.00, 1200.00, 5000.00, 3800.00, '2025-03-05 02:51:47', '2025-03-05 02:51:47'),
-(44, '2025-03-09', 9, 'Team Idlfta', 3, 'Athletic Wear', 'design9.png', 40, 180.00, 2000.00, 7200.00, 5200.00, '2025-03-05 02:51:47', '2025-03-05 02:51:47'),
-(45, '2025-03-10', 10, 'Team Kappa', 5, 'Large Banner Print', 'storage/uploads/1741151382_tshirt3.jpg', 5, 300.00, 1000.00, 1500.00, 500.00, '2025-03-05 02:51:47', '2025-03-05 05:09:42');
+INSERT INTO `project_transactions` (`project_transaction_id`, `transaction_date`, `customer_id`, `team_name`, `category_id`, `description`, `design_file`, `quantity`, `amount`, `downpayment`, `total`, `payable`, `due_date`, `start_date`, `created_at`, `updated_at`) VALUES
+(37, '2025-03-02', 2, 'Team Beta', 3, 'Polo Shirts', NULL, 30, 150.00, 1500.00, 4500.00, 3000.00, '2025-03-06 07:39:28', '2025-03-06 07:44:55', '2025-03-05 02:51:47', '2025-03-05 02:51:47'),
+(38, '2025-03-03', 3, 'Team Gamma', 1, 'Event Shirts', NULL, 100, 120.00, 2000.00, 12000.00, 10000.00, '2025-03-06 07:39:28', '2025-03-06 07:44:55', '2025-03-05 02:51:47', '2025-03-05 02:51:47'),
+(39, '2025-03-04', 4, 'Team Delta', 2, 'Custom Jerseys', NULL, 20, 125.00, 500.00, 2500.00, 2000.00, '2025-03-06 07:39:28', '2025-03-06 07:44:55', '2025-03-05 02:51:47', '2025-03-05 02:51:47'),
+(40, '2025-03-05', 5, 'Team Epsilon', 5, 'Tarpaulin Printing', NULL, 10, 200.00, 800.00, 2000.00, 1200.00, '2025-03-06 07:39:28', '2025-03-06 07:44:55', '2025-03-05 02:51:47', '2025-03-05 02:51:47'),
+(41, '2025-03-06', 6, 'Team Zeta', 3, 'Custom Hoodies', NULL, 15, 250.00, 1000.00, 3750.00, 2750.00, '2025-03-06 07:39:28', '2025-03-06 07:44:55', '2025-03-05 02:51:47', '2025-03-05 02:51:47'),
+(42, '2025-03-07', 7, 'Team Eta', 1, 'School T-Shirts', NULL, 80, 90.00, 1800.00, 7200.00, 5400.00, '2025-03-06 07:39:28', '2025-03-06 07:44:55', '2025-03-05 02:51:47', '2025-03-05 02:51:47'),
+(43, '2025-03-08', 8, 'Team Theta', 2, 'Corporate Uniforms', '/eightees_ims/storage/uploads/design_67c7e494779888.26472383.jpg', 25, 200.00, 1200.00, 5000.00, 3800.00, '2025-03-06 07:39:28', '2025-03-06 07:44:55', '2025-03-05 02:51:47', '2025-03-05 05:43:48'),
+(44, '2025-03-09', 9, 'Team Idlfta', 3, 'Athletic Wear', '/eightees_ims/storage/uploads/design_67c7e4e5b61266.66287043.jpg', 40, 180.00, 2500.00, 7200.00, 4700.00, '2025-03-06 07:39:28', '2025-03-06 07:44:55', '2025-03-05 02:51:47', '2025-03-05 05:45:09'),
+(45, '2025-03-10', 10, 'Brgy. IV', 1, 'T-Shirts', '/eightees_ims/storage/uploads/design_67c7e63462b024.10371364.jpg', 15, 300.00, 2500.00, 4500.00, 2000.00, '2025-03-06 07:39:28', '2025-03-06 07:44:55', '2025-03-05 02:51:47', '2025-03-06 07:46:22'),
+(47, '2025-03-10', 1, 'Brgy. VI', 2, 'XL - 100', NULL, 20, 400.00, 0.00, 8000.00, 8000.00, '2025-03-10 06:03:23', '2025-03-10 06:03:23', '2025-03-10 06:03:23', '2025-03-10 07:44:43'),
+(49, '2025-03-10', 1, 'Brgy. V', 2, 'L - 20\r\nXS - 10\r\nS - 5', '/eightees_ims/storage/uploads/design_67ce829e499300.59845199.png', 35, 400.00, 2000.00, 14000.00, 12000.00, '2025-03-12 22:10:00', '2025-03-09 22:10:00', '2025-03-10 06:11:08', '2025-03-10 07:44:29');
 
 -- --------------------------------------------------------
 
@@ -206,7 +239,8 @@ INSERT INTO `transaction_categories` (`category_id`, `category_name`) VALUES
 (1, 'T-Shirts'),
 (2, 'Jersey'),
 (3, 'Polo'),
-(5, 'Long Pants');
+(5, 'Long Pants'),
+(7, 'Scarfs');
 
 --
 -- Indexes for dumped tables
@@ -225,18 +259,16 @@ ALTER TABLE `customers`
   ADD PRIMARY KEY (`customer_id`);
 
 --
+-- Indexes for table `employee_salaries`
+--
+ALTER TABLE `employee_salaries`
+  ADD PRIMARY KEY (`salary_id`);
+
+--
 -- Indexes for table `expenses`
 --
 ALTER TABLE `expenses`
-  ADD PRIMARY KEY (`expense_id`),
-  ADD KEY `fk_expenses_categoryId` (`category_id`);
-
---
--- Indexes for table `expense_categories`
---
-ALTER TABLE `expense_categories`
-  ADD PRIMARY KEY (`category_id`),
-  ADD UNIQUE KEY `category_name` (`category_name`);
+  ADD PRIMARY KEY (`expense_id`);
 
 --
 -- Indexes for table `materials`
@@ -283,16 +315,16 @@ ALTER TABLE `customers`
   MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
+-- AUTO_INCREMENT for table `employee_salaries`
+--
+ALTER TABLE `employee_salaries`
+  MODIFY `salary_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
 -- AUTO_INCREMENT for table `expenses`
 --
 ALTER TABLE `expenses`
-  MODIFY `expense_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `expense_categories`
---
-ALTER TABLE `expense_categories`
-  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `expense_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `materials`
@@ -310,23 +342,17 @@ ALTER TABLE `material_categories`
 -- AUTO_INCREMENT for table `project_transactions`
 --
 ALTER TABLE `project_transactions`
-  MODIFY `project_transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `project_transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT for table `transaction_categories`
 --
 ALTER TABLE `transaction_categories`
-  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `expenses`
---
-ALTER TABLE `expenses`
-  ADD CONSTRAINT `fk_expenses_categoryId` FOREIGN KEY (`category_id`) REFERENCES `expense_categories` (`category_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `materials`
